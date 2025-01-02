@@ -1,0 +1,2236 @@
+{
+	"info": {
+		"_postman_id": "e5b7ba54-a2ba-4186-b2a0-96296205f910",
+		"name": "Reading List Manager API",
+		"description": "This is the root level for this API testing workspace, containing all collections related to the Reading List Manager API. It is organized by resources such as Books, Ratings, Notes, and Favorites, and the tests are divided into Positive and Negative Tests.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37125160"
+	},
+	"item": [
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "Positive Tests",
+					"item": [
+						{
+							"name": "Get All Books",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Books list is not empty\", function () {\r",
+											"    var jsonData = pm.response.json().books;\r",
+											"    pm.expect(jsonData.length).to.be.above(0);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Each book contains required fields\", function () {\r",
+											"    var jsonData = pm.response.json().books;\r",
+											"    jsonData.forEach(function(book) {\r",
+											"        pm.expect(book).to.have.property(\"title\");\r",
+											"        pm.expect(book).to.have.property(\"author\");\r",
+											"        pm.expect(book).to.have.property(\"genre\");\r",
+											"        pm.expect(book).to.have.property(\"publication_year\");\r",
+											"        pm.expect(book).to.have.property(\"status_reading\");\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/books",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books"
+									]
+								},
+								"description": "Tests the GET /books endpoint to retrieve a list of all books in the system. The test checks if the response returns a status code of 200 and verifies the structure of the returned data."
+							},
+							"response": []
+						},
+						{
+							"name": "Get Book by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body contains book details\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"id\");\r",
+											"    pm.expect(jsonData).to.have.property(\"title\");\r",
+											"    pm.expect(jsonData).to.have.property(\"author\");\r",
+											"    pm.expect(jsonData).to.have.property(\"genre\");\r",
+											"    pm.expect(jsonData).to.have.property(\"publication_year\");\r",
+											"    pm.expect(jsonData).to.have.property(\"status_reading\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/books/9",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										"9"
+									]
+								},
+								"description": "Tests the GET /books/{id} endpoint to retrieve a specific book by its ID. This test validates that the response status code is 200 and that the correct book data is returned."
+							},
+							"response": []
+						},
+						{
+							"name": "Create New Book",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Book created successfully\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonData).to.have.property('title');\r",
+											"    pm.expect(jsonData.title).to.eql(\"I Will Teach You to Be Rich\");\r",
+											"    pm.expect(jsonData).to.have.property('author');\r",
+											"    pm.expect(jsonData.author).to.eql(\"Ramit Sethi\");\r",
+											"    pm.expect(jsonData).to.have.property('id');\r",
+											"    pm.expect(jsonData.id).to.be.a('number'); \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"I Will Teach You to Be Rich\",\r\n    \"author\": \"Ramit Sethi\",\r\n    \"genre\": \"Finance\",\r\n    \"publication_year\": 2009,\r\n    \"status_reading\": \"not_started\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/books",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books"
+									]
+								},
+								"description": "Tests the POST /books endpoint to create a new book. This test checks if the API returns a 201 status code upon successful creation and that the book's details are stored correctly."
+							},
+							"response": []
+						},
+						{
+							"name": "Update Book",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Book updated successfully\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    if (jsonData.message) {\r",
+											"        pm.expect(jsonData.message).to.eql(\"Book updated successfully\");\r",
+											"    } else {\r",
+											"        console.log(\"Message not found in response.\");\r",
+											"    }\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Beach Read\",\r\n    \"author\": \"Emily Henry\",\r\n    \"genre\": \"Romance\",\r\n    \"publication_year\": 2020,\r\n    \"status_reading\": \"completed\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/books/6",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										"6"
+									]
+								},
+								"description": "Tests the PUT /books/{id} endpoint to update an existing book's details. This test ensures the book's data is updated correctly and that the correct status code (200) is returned."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Book",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body is empty\", function () {\r",
+											"    pm.expect(pm.response.text()).to.eql('');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/books/7",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										"7"
+									]
+								},
+								"description": "Tests the DELETE /books/{id} endpoint to delete a book by its ID. The test verifies that the book is deleted and the correct status code (200) is returned."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative Test",
+					"item": [
+						{
+							"name": "Create new book with missing required fields",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is in JSON format\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message is returned\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail[0].msg.toLowerCase()).to.include(\"field required\".toLowerCase()); \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"The Psychology of Money\",\r\n    \"genre\": \"Finance\",\r\n    \"publication_year\": 2020,\r\n    \"status_reading\": \"not_started\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/books",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books"
+									]
+								},
+								"description": "Tests the POST /books endpoint with missing required fields in the request body. This ensures the API returns a 400 status code and an appropriate error message."
+							},
+							"response": []
+						},
+						{
+							"name": "Create new book with invalid enum",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is in JSON format\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for invalid reading status\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail[0].msg).to.include(\"Input should be 'not_started', 'in_progress' or 'completed'\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"The Psychology of Money\",\r\n    \"author\": \"Morgan Housel\",\r\n    \"genre\": \"Finance\",\r\n    \"publication_year\": 2020,\r\n    \"status_reading\": \"in my reading list\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/books",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books"
+									]
+								},
+								"description": "Tests the POST /books endpoint by sending an invalid enum value for a book's reading progress field. This ensures the API returns a 400 error with the correct validation message."
+							},
+							"response": []
+						},
+						{
+							"name": "book with an invalid ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is in JSON format\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for invalid ID\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.eql(\"Book not found\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/books/99999",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										"99999"
+									]
+								},
+								"description": "Tests the POST /books endpoint by sending an invalid ID value for a book's id. This ensures the API returns a 400 error with the correct validation message."
+							},
+							"response": []
+						},
+						{
+							"name": "update book with an invalid ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is in JSON format\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for invalid ID\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.eql(\"Book not found\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"The Psychology of Money\",\r\n  \"author\": \"Morgan Housel\",\r\n  \"genre\": \"Finance\",\r\n  \"publication_year\": 2020,\r\n  \"status_reading\": \"in_progress\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/books/99999",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										"99999"
+									]
+								},
+								"description": "Tests the PUT /books/{id} endpoint by using a non-existent book ID. This ensures the API responds with a 404 status code indicating the book was not found."
+							},
+							"response": []
+						},
+						{
+							"name": "delete book with an invalid ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is in JSON format\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for invalid ID\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.eql(\"Book not found\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/books/99999",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										"99999"
+									]
+								},
+								"description": "Tests the DELETE /books/{id} endpoint using an invalid or non-existent ID. This ensures the API returns a 404 error."
+							},
+							"response": []
+						},
+						{
+							"name": "book with invalid format",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is in JSON format\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for invalid data format\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail[0].msg).to.include(\"Input should be a valid integer\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"I’m Glad My Mom Died\",\r\n  \"author\": \"Jennette McCurdy\",\r\n  \"genre\": \"Nonfiction\",\r\n  \"publication_year\": \"twenty-two\",\r\n  \"status_reading\": \"not_started\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/books/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										""
+									]
+								},
+								"description": "Tests the POST /books endpoint with data in an incorrect format (e.g., missing fields, incorrect data types). This ensures the API returns a 400 status code indicating bad input."
+							},
+							"response": []
+						},
+						{
+							"name": "update book with missing required fields",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is in JSON format\", function () {\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for missing required fields\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail[0].msg).to.include(\"required\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"The Lord of the Rings\",\r\n    \"genre\": \"Fantasy\",\r\n    \"status_reading\": \"completed\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/books/3",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										"3"
+									]
+								},
+								"description": "Tests the PUT /books/{id} endpoint with missing required fields. This ensures the API responds with a 404 status code indicating the book was not found."
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"description": "This collection is dedicated to testing the API endpoints for managing books. It includes requests to create, read, update, and delete books, along with testing various edge cases and invalid inputs."
+		},
+		{
+			"name": "Ratings",
+			"item": [
+				{
+					"name": "Positive Tests",
+					"item": [
+						{
+							"name": "Add Rating",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Rating added successfully\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.rating).to.be.a('number');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"book_id\": 1,\r\n    \"rating\": 4,\r\n    \"user_feedback\": \"Great read, but some parts were slow.\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/ratings/6",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ratings",
+										"6"
+									]
+								},
+								"description": "Tests the POST /ratings endpoint to add a new rating for a book. The test ensures that the rating is created successfully and returns a 201 status code."
+							},
+							"response": []
+						},
+						{
+							"name": "Get Rating by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Correct rating data is returned\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"id\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"book_id\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"rating\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"user_feedback\").that.is.a('string');\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/ratings/5",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ratings",
+										"5"
+									]
+								},
+								"description": "Tests the GET /ratings/{id} endpoint to retrieve a rating by its ID. This test ensures that the rating is correctly fetched and that the response status code is 200."
+							},
+							"response": []
+						},
+						{
+							"name": "Update Rating with Valid Data",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Correct response data after update\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"id\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"book_id\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"rating\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"user_feedback\").that.is.a('string');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"rating\": 5,\r\n  \"user_feedback\": \"Absolutely loved it! A must-read for fantasy fans.\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/ratings/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ratings",
+										"1"
+									]
+								},
+								"description": "Tests the PUT /ratings/{id} endpoint to update an existing rating. The test verifies that the rating is updated correctly and the API responds with a 200 status code."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Rating by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is empty\", function () {\r",
+											"    pm.response.to.have.body(\"\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/ratings/6",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ratings",
+										"6"
+									]
+								},
+								"description": "Tests the DELETE /ratings/{id} endpoint to delete a rating by its ID. The test ensures the rating is deleted successfully and the status code 200 is returned."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative Test",
+					"item": [
+						{
+							"name": "Add Rating without Missing Required Fields",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for missing rating\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail[0].msg).to.include(\"Field required\");\r",
+											"    pm.expect(jsonData.detail[0].loc).to.include(\"rating\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"book_id\": 1,\r\n  \"user_feedback\": \"Missing rating field\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/ratings/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ratings",
+										"1"
+									]
+								},
+								"description": "Tests the POST /ratings endpoint by sending a request with missing required fields (e.g., rating value). The test ensures the API returns a 400 status code with an appropriate error message."
+							},
+							"response": []
+						},
+						{
+							"name": "Add rating with Invalid Rating Value",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for invalid rating\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Rating must be between 1 and 5.\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"book_id\": 1,\r\n  \"rating\": 10,\r\n  \"user_feedback\": \"Invalid rating value\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/ratings/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ratings",
+										"1"
+									]
+								},
+								"description": "Tests the POST /ratings endpoint with an invalid rating value (e.g., a value out of the accepted range). The test ensures the API returns a 400 status code with a validation error."
+							},
+							"response": []
+						},
+						{
+							"name": "Add rating with Non-Existent Book ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for non-existent book ID\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Book not found\"); \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"book_id\": 99999,\r\n  \"rating\": 5,\r\n  \"user_feedback\": \"Non-existent book ID\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/ratings/99999",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ratings",
+										"99999"
+									]
+								},
+								"description": "Tests the POST /ratings endpoint by providing a non-existent book ID. The test checks that the API responds with a 404 status code."
+							},
+							"response": []
+						},
+						{
+							"name": "Get rating with invalid ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Error message for invalid rating ID\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Rating not found\");  \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/ratings/99999",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ratings",
+										"99999"
+									]
+								},
+								"description": "Tests the GET /ratings/{id} endpoint with an invalid or non-existent rating ID. The test ensures the API returns a 404 status code indicating that the rating was not found."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete rating with invalid ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for invalid rating ID\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Rating not found\");  \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/ratings/99999",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"ratings",
+										"99999"
+									]
+								},
+								"description": "Tests the DELETE /ratings/{id} endpoint with an invalid rating ID. The test verifies that the API returns a 404 status code indicating that the rating was not found."
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"description": "This collection tests the Ratings-related endpoints, including creating, retrieving, updating, and deleting ratings associated with books."
+		},
+		{
+			"name": "Notes",
+			"item": [
+				{
+					"name": "Positive Tests",
+					"item": [
+						{
+							"name": "Create New Note",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response contains note data\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"book_id\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"notes_text\").that.is.a('string');\r",
+											"    pm.expect(jsonData).to.have.property(\"id\");\r",
+											"    pm.expect(jsonData).to.have.property(\"timestamp\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"notes_text\": \"A journey of self-discovery and redemption through vulnerability and humor.\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/notes/9",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"notes",
+										"9"
+									]
+								},
+								"description": "Tests the POST /notes endpoint to create a new note for a book. The test verifies that the note is successfully created and the correct status code (201) is returned."
+							},
+							"response": []
+						},
+						{
+							"name": "Get note by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response contains valid note data\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    var firstNote = jsonData.notes[0];\r",
+											"\r",
+											"    pm.expect(firstNote).to.have.property(\"id\").that.is.a('number');\r",
+											"    pm.expect(firstNote).to.have.property(\"book_id\").that.is.a('number');\r",
+											"    \r",
+											"    if (firstNote.notes_text !== null && firstNote.notes_text !== undefined) {\r",
+											"        pm.expect(firstNote.notes_text).to.be.a('string');\r",
+											"    } else {\r",
+											"        pm.expect(firstNote.notes_text).to.be.null;\r",
+											"    }\r",
+											"    if (firstNote.timestamp !== null && firstNote.timestamp !== undefined) {\r",
+											"        pm.expect(firstNote.timestamp).to.be.a('string');\r",
+											"    } else {\r",
+											"        pm.expect(firstNote.timestamp).to.be.null;\r",
+											"    }\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/notes/9",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"notes",
+										"9"
+									]
+								},
+								"description": "Tests the GET /notes/{id} endpoint to retrieve a specific note by its ID. The test ensures that the correct note data is returned with a 200 status code."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Note by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body is empty\", function () {\r",
+											"    pm.response.to.have.body(\"\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/notes/3",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"notes",
+										"3"
+									]
+								},
+								"description": "Tests the DELETE /notes/{id} endpoint to delete a note by its ID. The test confirms that the note is deleted successfully and returns a 200 status code."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative Test",
+					"item": [
+						{
+							"name": "Create note with Missing Required Fields",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for missing notes_text\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\"); \r",
+											"    pm.expect(jsonData.detail[0].type).to.eql(\"missing\");\r",
+											"    pm.expect(jsonData.detail[0].loc).to.include(\"notes_text\");  \r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"book_id\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/notes/3",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"notes",
+										"3"
+									]
+								},
+								"description": "Tests the POST /notes endpoint by sending a request with missing required fields (e.g., empty note text). The test ensures that the API returns a 400 status code indicating missing data."
+							},
+							"response": []
+						},
+						{
+							"name": "Create note with Empty notes_text",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for empty notes_text\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Notes text cannot be empty\"); \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"book_id\": 5,\r\n  \"notes_text\": \"   \"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/notes/5",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"notes",
+										"5"
+									]
+								},
+								"description": "Tests the POST /notes endpoint by sending a request with invalid or malformed data. The test checks that the API returns a 400 status code with an appropriate error message."
+							},
+							"response": []
+						},
+						{
+							"name": "Get note with Invalid Note ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Error message for invalid note ID\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Book not found\"); \r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/notes/99999",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"notes",
+										"99999"
+									]
+								},
+								"description": "Tests the GET /notes/{id} endpoint by querying with a non-existent note ID. The test ensures that the API returns a 404 status code indicating the note is not found."
+							},
+							"response": []
+						},
+						{
+							"name": "delete note with an invalid ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404); \r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for invalid note ID\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Note not found\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/notes/99999",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"notes",
+										"99999"
+									]
+								},
+								"description": "StartFragmentTests the `DELETE /notes/{id}` endpoint with an invalid rating ID. The test verifies that the API returns a 404 status code indicating that the rating was not found.EndFragment"
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"description": "This collection tests the Notes-related endpoints, including creating, retrieving, and deleting notes for books."
+		},
+		{
+			"name": "Favorites",
+			"item": [
+				{
+					"name": "Positive Tests",
+					"item": [
+						{
+							"name": "Add Book to Favorites",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response contains favorite data\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"id\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"book_id\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"is_favorite\").that.is.a('boolean');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"book_id\": 3,\r\n    \"is_favorite\": true\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/favorites/3",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"favorites",
+										"3"
+									]
+								},
+								"description": "Tests the POST /favorites endpoint to add a book to the favorites list. The test verifies that the book is added successfully and returns a 201 status code."
+							},
+							"response": []
+						},
+						{
+							"name": "Get Favorite by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response contains correct favorite data\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"id\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"book_id\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"is_favorite\").that.is.a('boolean');\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/favorites/3",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"favorites",
+										"3"
+									]
+								},
+								"description": "Tests the GET /favorites/{id} endpoint to retrieve a favorite book by its ID. The test checks that the correct book is returned with a 200 status code."
+							},
+							"response": []
+						},
+						{
+							"name": "Update Favorite by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response contains updated favorite data\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"id\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"book_id\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"is_favorite\").that.is.a('boolean');\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"is_favorite\": false\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/favorites/4",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"favorites",
+										"4"
+									]
+								},
+								"description": "Tests the PUT /favorites/{id} endpoint to update a favorite book. The test ensures the favorite is updated correctly and returns a 200 status code."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Favorite by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is empty\", function () {\r",
+											"    pm.response.to.have.body(\"\"); \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/favorites/3",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"favorites",
+										"3"
+									]
+								},
+								"description": "Tests the DELETE /favorites/{id} endpoint to remove a book from the favorites list by its ID. The test ensures the book is deleted and returns a 204 status code."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative Test",
+					"item": [
+						{
+							"name": "Add Book to Favorites with Missing ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for missing book_id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Not Found\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"is_favorite\": true\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/favorites",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"favorites"
+									]
+								},
+								"description": "Tests the `POST /favorites` endpoint without providing a book ID in the request. Validates that the API returns a 400 error indicating missing data."
+							},
+							"response": []
+						},
+						{
+							"name": "Add to Favorite with Invalid Book ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for invalid book_id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Not Found\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"book_id\": 99999,\r\n  \"is_favorite\": true\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/favorites",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"favorites"
+									]
+								},
+								"description": "Tests the GET /favorites/{id} endpoint with an invalid or non-existent book ID. Ensures the API returns a 404 error for not found."
+							},
+							"response": []
+						},
+						{
+							"name": "Update Favorite with Invalid ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for invalid favorite ID\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Favorite status not found\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"is_favorite\": false\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/favorites/9999",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"favorites",
+										"9999"
+									]
+								},
+								"description": "Tests the PUT /favorites/{id} endpoint using an invalid ID. Confirms that the API responds with a 404 status code and an appropriate error message."
+							},
+							"response": []
+						},
+						{
+							"name": "Get Favorite with Invalid ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for invalid favorite ID\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Favorite status not found\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/favorites/9999",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"favorites",
+										"9999"
+									]
+								},
+								"description": "Tests the GET /favorites/{id} endpoint with an invalid or malformed ID format. Ensures the API returns a 400 or 404 status code."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Favorite with Invalid ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for invalid favorite ID\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Favorite status not found\"); \r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/favorites/9999",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"favorites",
+										"9999"
+									]
+								},
+								"description": "Tests the DELETE /favorites/{id} endpoint with an invalid ID. Confirms that the API responds with a 404 status code and error message indicating the favorite is not found."
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"description": "This collection tests the endpoints related to managing the favorite books list, including adding, updating, and deleting books from the favorites list."
+		},
+		{
+			"name": "Reading Progress",
+			"item": [
+				{
+					"name": "Positive Tests",
+					"item": [
+						{
+							"name": "Create Reading Progress",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response contains valid reading progress data\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(jsonData).to.have.property(\"id\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"current_page\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"total_pages\").that.is.a('number'); \r",
+											"    pm.expect(jsonData).to.have.property(\"percentage_completed\").that.is.a('number');\r",
+											"    \r",
+											"    // Ensure percentage_completed is correct\r",
+											"    const expectedPercentage = (jsonData.current_page / jsonData.total_pages) * 100;\r",
+											"    pm.expect(jsonData.percentage_completed).to.be.closeTo(expectedPercentage, 0.1); // Allow small tolerance\r",
+											"});\r",
+											"\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"book_id\": 1,\r\n  \"current_page\": 50,\r\n  \"total_pages\": 517\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/progress/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"progress",
+										"1"
+									]
+								},
+								"description": "Tests the POST /reading-progress endpoint to create a new reading progress record. Ensures valid data results in a 201 status code and the progress is recorded."
+							},
+							"response": []
+						},
+						{
+							"name": "Update Reading Progress",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response contains updated reading progress data\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"id\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"current_page\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"total_pages\").that.is.a('number'); \r",
+											"    pm.expect(jsonData).to.have.property(\"percentage_completed\").that.is.a('number');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"current_page\": 350,\r\n    \"total_pages\": 350\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/progress/6",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"progress",
+										"6"
+									]
+								},
+								"description": "Tests the PUT /reading-progress/{id} endpoint to update an existing reading progress record. Confirms a successful update and a 200 status code."
+							},
+							"response": []
+						},
+						{
+							"name": "Get Reading Progress by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response contains correct reading progress data\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(jsonData).to.have.property(\"id\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"current_page\").that.is.a('number');\r",
+											"    pm.expect(jsonData).to.have.property(\"total_pages\").that.is.a('number'); \r",
+											"    pm.expect(jsonData).to.have.property(\"percentage_completed\").that.is.a('number');\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/progress/3",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"progress",
+										"3"
+									]
+								},
+								"description": "Tests the GET /reading-progress/{id} endpoint to retrieve progress by its ID. Ensures a 200 status code and correct progress data."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Reading Progress by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response confirms successful deletion\", function () {\r",
+											"    pm.response.to.have.body(\"\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/progress/5",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"progress",
+										"5"
+									]
+								},
+								"description": "Tests the DELETE /reading-progress/{id} endpoint to delete a reading progress record. Validates that the record is deleted successfully with a 200 status code."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative Test",
+					"item": [
+						{
+							"name": "Invalid current_page value",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for invalid current_page\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"current_page cannot be negative\");\r",
+											"});\r",
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"book_id\": 1,\r\n  \"current_page\": -5,\r\n  \"total_pages\": 100\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/progress/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"progress",
+										"1"
+									]
+								},
+								"description": "Tests the POST /reading-progress endpoint with an invalid current_page value (e.g., negative number or non-integer). Ensures the API returns a 400 status code"
+							},
+							"response": []
+						},
+						{
+							"name": "Current_page greater than total_pages",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for current_page greater than total_pages\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"current_page cannot be greater than total_pages\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"book_id\": 1,\r\n  \"current_page\": 600,\r\n  \"total_pages\": 517\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/progress/1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"progress",
+										"1"
+									]
+								},
+								"description": "Tests the POST /reading-progress endpoint where current_page exceeds total_pages. Verifies the API rejects the request with a 400 status code."
+							},
+							"response": []
+						},
+						{
+							"name": "Update a reading progress with invalid ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for non-existent ID\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Progress not found\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"current_page\": 70,\r\n  \"total_pages\": 250\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/progress/99999",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"progress",
+										"99999"
+									]
+								},
+								"description": "Tests the PUT /reading-progress/{id} endpoint with an invalid or non-existent ID. Confirms the API responds with a 404 status code and relevant error message."
+							},
+							"response": []
+						},
+						{
+							"name": "Get reading progress with invalid  ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for non-existent ID\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Progress not found\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/progress/99999",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"progress",
+										"99999"
+									]
+								},
+								"description": "Tests the GET /reading-progress/{id} endpoint using an invalid or malformed ID. Ensures the API returns a 404 or 400 error for invalid input."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete reading progress with invalid ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Error message for non-existent ID\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property(\"detail\");\r",
+											"    pm.expect(jsonData.detail).to.include(\"Progress not found\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/progress/99999",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"progress",
+										"99999"
+									]
+								},
+								"description": "Tests the DELETE /reading-progress/{id} endpoint using an invalid ID. Confirms that the API returns a 404 status code indicating the record was not found."
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"description": "This collection tests the API endpoints for managing reading progress of books. It covers creating, updating, retrieving, and deleting reading progress records, as well as handling invalid input scenarios."
+		}
+	]
+}
