@@ -1,0 +1,5 @@
+# Ignore IDE and virtual environment folders
+.idea/
+.venv/
+venv/
+.env
