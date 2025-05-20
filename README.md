@@ -35,6 +35,7 @@ Before you begin, ensure you have the following installed:
 ### Installation
 1. Clone the repository:
 [git clone](https://github.com/Inbar-kr/reading-list-manager-api.git)
+
     `cd reading-list-manager`
 2. Create and activate a virtual environment (optional but recommended):
 
