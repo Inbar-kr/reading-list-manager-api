@@ -1,12 +1,12 @@
-# **Reading List Manager**
+# Reading List Manager
 
-### **Project Overview**
+## Project Overview
 
 Reading List Manager is a backend application built with FastAPI and SQLAlchemy that allows users to track and manage their reading lists. 
 It provides functionality for adding, updating, deleting, and viewing books. 
 In addition, it allows users to track their reading progress, add notes, rate books, and mark favorites.
 
-### **Key Features:**
+### Key Features:
 
 * **Books:** Manage details of books, including title, author, genre, and publication year.
 * **Reading Progress:** Track progress by marking the current page and calculating the percentage completed.
@@ -14,7 +14,7 @@ In addition, it allows users to track their reading progress, add notes, rate bo
 * **Ratings:** Rate books from 1 to 5 and add feedback.
 * **Favorites:** Mark books as favorites.
 
-### **Tech Stack**
+### Tech Stack
 
 * **Backend Framework:** FastAPI
 * **Database:** MySQL (or SQLite, depending on configuration)
@@ -33,27 +33,26 @@ Before you begin, ensure you have the following installed:
 * Virtual Environment (optional but recommended)
 
 ### Installation
-1. **Clone the repository:**
-git clone https://github.com/Inbar-kr/reading-list-manager-api.git
+1. Clone the repository:
+[git clone](https://github.com/Inbar-kr/reading-list-manager-api.git)
+    `cd reading-list-manager`
+2. Create and activate a virtual environment (optional but recommended):
 
-    cd reading-list-manager
-2. **Create and activate a virtual environment (optional but recommended):**
-
-    **For Windows:**
+    For Windows:
    ` python -m venv venv`
    `.\venv\Scripts\activate`
 
-    **For macOS/Linux:**
+    For macOS/Linux:
     `python3 -m venv venv`
    `source venv/bin/activate`
 
-3. **Install dependencies:**
+3. Install dependencies:
     `pip install -r requirements.txt`
 
-4.  **Set up the database:**
+4.  Set up the database:
     Create a new database named reading_list_manager_schema
 
-5. **Running the Application:**
+5. Running the Application:
 
     To run the FastAPI application, use Uvicorn:
     `uvicorn app.main:app --reload`
@@ -93,4 +92,4 @@ To run the tests for the project (Tests are located in the app/tests/ folder), e
 
 Then, run the tests: `pytest`
 
-###### Note: This project is a private repository created for personal and portfolio purposes. It is not intended for redistribution or external use.
+###### Note: This project is a personal and educational portfolio project. It is not intended for redistribution or external use.
