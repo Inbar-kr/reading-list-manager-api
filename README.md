@@ -93,8 +93,8 @@ To run the tests for the project (Tests are located in the app/tests/ folder), e
 
 Then, run the tests: `pytest`
 
-## Demo: API in action
+## Gif: Create Book Endpoint
 
-![API usage demo](docs/Create Book Combine Gif.gif)
+![Create Book Endpoint](docs/Create Book Endpoint.gif)
 
 ###### Note: This project is a personal and educational portfolio project. It is not intended for redistribution or external use.
