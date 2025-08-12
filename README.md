@@ -95,6 +95,6 @@ Then, run the tests: `pytest`
 
 ## Gif: Create Book Endpoint
 
-![Create Book Endpoint](docs/Create Book Endpoint.gif)
+![Create Book Endpoint](docs/Create_Book_Endpoint.gif)
 
 ###### Note: This project is a personal and educational portfolio project. It is not intended for redistribution or external use.
