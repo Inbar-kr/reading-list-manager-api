@@ -93,7 +93,10 @@ To run the tests for the project (Tests are located in the app/tests/ folder), e
 
 Then, run the tests: `pytest`
 
-## Gif: Create Book Endpoint
+## Demo: Adding a New Book (POST /books)
+
+The example below demonstrates creating a new book by sending a `POST` request to `/books` with the title, author, genre, publication year, and reading status.  
+The API responds with the newly created book’s details.
 
 ![Create Book Endpoint](docs/Create_Book_Endpoint.gif)
 
