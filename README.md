@@ -1,8 +1,7 @@
 # Reading List Manager
 
-Stack: FastAPI, SQLAlchemy, Alembic, MySQL.
-
-Outcome: A RESTful API for managing personal reading lists, featuring CRUD operations, user authentication, and database migrations.
+* **Stack:** FastAPI, SQLAlchemy, Alembic, MySQL.
+* **Outcome:** A RESTful API for managing personal reading lists, featuring CRUD operations, user authentication, and database migrations.
 
 ## Project Overview
 
